@@ -4,21 +4,34 @@ const GRID_PADDING = 12;
 const GRID_GAP = 4;
 
 const slotGrid = document.getElementById('slotGrid');
+
 const imageModal = document.getElementById('imageModal');
 const modalImage = document.getElementById('modalImage');
 const modalTitle = document.getElementById('modalTitle');
 const modalDesc = document.getElementById('modalDesc');
 const modalClose = document.getElementById('modalClose');
 
-const featuredSlots = new Set([2, 3, 4, 5, 6]);
+const requestModal = document.getElementById('requestModal');
+const requestSlotNumber = document.getElementById('requestSlotNumber');
+const requestModalClose = document.getElementById('requestModalClose');
+const goToFormButton = document.getElementById('goToFormButton');
+const cancelFormButton = document.getElementById('cancelFormButton');
+
 const premiumSlots = new Set([1, 365]);
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+let selectedSlotNumber = null;
+
+/*
+  슬롯 번호 자동 입력용 구글폼 링크
+  entry.1362014499 = 슬롯 번호
+*/
+const FORM_URL_TEMPLATE =
+  'https://docs.google.com/forms/d/e/1FAIpQLSdHOskkCylXlN5_4ugreP1Vx7fVnYPQ5btfu_07yBn7SdbuoA/viewform?usp=pp_url&entry.1362014499=__SLOT__';
 
 /*
   샘플 등록 데이터
-  추후에는 서버/DB 데이터로 바꾸면 되고,
-  image는 지금 임시 이미지 주소를 넣어둔 거라,
-  실제 운영할 때는 업로드한 이미지 URL로 바꾸면 됩니다.
+  실제 운영할 때는 네가 승인한 슬롯만 여기에 넣거나
+  나중에 DB/JSON으로 빼면 됨
 */
 const registeredPets = {
   176: {
@@ -30,21 +43,11 @@ const registeredPets = {
 };
 
 function getSlotType(slotNumber) {
-  if (featuredSlots.has(slotNumber)) return 'featured';
   if (premiumSlots.has(slotNumber)) return 'premium';
   return 'basic';
 }
 
-function isNewRegistration(pet) {
-  return (
-    pet &&
-    pet.registeredAt &&
-    Date.now() - new Date(pet.registeredAt).getTime() <= ONE_DAY_MS
-  );
-}
-
-function getSlotBadgeText(type, pet) {
-  if (isNewRegistration(pet)) return '신규';
+function getSlotBadgeText(type) {
   if (type === 'premium') return '유료';
   return '';
 }
@@ -55,14 +58,8 @@ function createSlotCard(slotNumber) {
   const card = document.createElement('div');
 
   card.className = `slot-card ${type}`;
-  if (pet) {
-    card.classList.add('has-image');
-    if (isNewRegistration(pet)) {
-      card.classList.add('new');
-    }
-  }
 
-  const badgeText = getSlotBadgeText(type, pet);
+  const badgeText = getSlotBadgeText(type);
 
   card.innerHTML = `
     ${badgeText ? `<span class="slot-badge">${badgeText}</span>` : ''}
@@ -75,7 +72,11 @@ function createSlotCard(slotNumber) {
   `;
 
   if (pet) {
+    card.classList.add('has-image');
     card.addEventListener('click', () => openImageModal(pet));
+  } else {
+    card.classList.add('is-empty');
+    card.addEventListener('click', () => openRequestModal(slotNumber));
   }
 
   return card;
@@ -137,14 +138,37 @@ function openImageModal(pet) {
   modalDesc.textContent = pet.desc;
   imageModal.classList.remove('hidden');
   imageModal.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
 }
 
 function closeImageModal() {
   imageModal.classList.add('hidden');
   imageModal.setAttribute('aria-hidden', 'true');
   modalImage.src = '';
-  document.body.style.overflow = 'hidden';
+}
+
+function openRequestModal(slotNumber) {
+  selectedSlotNumber = slotNumber;
+  requestSlotNumber.textContent = `${slotNumber}번`;
+  requestModal.classList.remove('hidden');
+  requestModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeRequestModal() {
+  requestModal.classList.add('hidden');
+  requestModal.setAttribute('aria-hidden', 'true');
+  selectedSlotNumber = null;
+}
+
+function goToGoogleForm() {
+  if (!selectedSlotNumber) return;
+
+  const finalUrl = FORM_URL_TEMPLATE.replace(
+    '__SLOT__',
+    encodeURIComponent(String(selectedSlotNumber))
+  );
+
+  window.open(finalUrl, '_blank', 'noopener,noreferrer');
+  closeRequestModal();
 }
 
 modalClose.addEventListener('click', closeImageModal);
@@ -159,9 +183,24 @@ imageModal.addEventListener('click', (event) => {
   }
 });
 
+requestModalClose.addEventListener('click', closeRequestModal);
+cancelFormButton.addEventListener('click', closeRequestModal);
+goToFormButton.addEventListener('click', goToGoogleForm);
+
+requestModal.addEventListener('click', (event) => {
+  if (event.target.classList.contains('request-modal__backdrop')) {
+    closeRequestModal();
+  }
+});
+
 window.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && !imageModal.classList.contains('hidden')) {
-    closeImageModal();
+  if (event.key === 'Escape') {
+    if (!imageModal.classList.contains('hidden')) {
+      closeImageModal();
+    }
+    if (!requestModal.classList.contains('hidden')) {
+      closeRequestModal();
+    }
   }
 });
 
