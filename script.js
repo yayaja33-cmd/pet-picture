@@ -10,35 +10,22 @@ const modalTitle = document.getElementById('modalTitle');
 const modalDesc = document.getElementById('modalDesc');
 const modalClose = document.getElementById('modalClose');
 
-const featuredSlots = new Set([1, 2, 3, 4, 5, 6]);
-const premiumSlots = new Set([25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350]);
+const featuredSlots = new Set([2, 3, 4, 5, 6]);
+const premiumSlots = new Set([1, 365]);
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 /*
   샘플 등록 데이터
-  나중에는 서버/DB 데이터로 바꾸면 됨.
+  추후에는 서버/DB 데이터로 바꾸면 되고,
   image는 지금 임시 이미지 주소를 넣어둔 거라,
-  실제 운영할 때는 업로드한 이미지 URL로 바꾸면 됨.
+  실제 운영할 때는 업로드한 이미지 URL로 바꾸면 됩니다.
 */
 const registeredPets = {
-  1: {
-    name: '콩이',
-    desc: '우리집 첫 번째 친구',
-    image: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=1200&q=80'
-  },
-  8: {
-    name: '초코',
-    desc: '햇살 좋아하던 강아지',
-    image: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=1200&q=80'
-  },
-  32: {
-    name: '보리',
-    desc: '장난꾸러기 고양이',
-    image: 'https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=1200&q=80'
-  },
-  77: {
-    name: '두부',
-    desc: '항상 곁에 있던 아이',
-    image: 'https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=1200&q=80'
+  176: {
+    name: '콩지',
+    desc: '롱다리 강아지',
+    image: 'https://i.postimg.cc/G2xd4Xks/kongji(175).jpg',
+    registeredAt: Date.now()
   }
 };
 
@@ -48,8 +35,16 @@ function getSlotType(slotNumber) {
   return 'basic';
 }
 
-function getSlotBadgeText(type) {
-  if (type === 'featured') return '특별';
+function isNewRegistration(pet) {
+  return (
+    pet &&
+    pet.registeredAt &&
+    Date.now() - new Date(pet.registeredAt).getTime() <= ONE_DAY_MS
+  );
+}
+
+function getSlotBadgeText(type, pet) {
+  if (isNewRegistration(pet)) return '신규';
   if (type === 'premium') return '유료';
   return '';
 }
@@ -60,9 +55,14 @@ function createSlotCard(slotNumber) {
   const card = document.createElement('div');
 
   card.className = `slot-card ${type}`;
-  if (pet) card.classList.add('has-image');
+  if (pet) {
+    card.classList.add('has-image');
+    if (isNewRegistration(pet)) {
+      card.classList.add('new');
+    }
+  }
 
-  const badgeText = getSlotBadgeText(type);
+  const badgeText = getSlotBadgeText(type, pet);
 
   card.innerHTML = `
     ${badgeText ? `<span class="slot-badge">${badgeText}</span>` : ''}
