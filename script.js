@@ -1,0 +1,1 @@
+console.log("pet-picture 연결됨");
