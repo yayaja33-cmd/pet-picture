@@ -3,12 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pet-picture</title>
+  <title>반려동물 사진 등록 슬롯</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>pet-picture</h1>
-  <p>반려동물 사진 등록 사이트</p>
+  <div class="page">
+    <header class="top-bar">
+      <div class="top-bar__inner">
+        <h1>반려동물 사진 등록 슬롯</h1>
+        <p>기본 1칸 등록 / 유료 확장 / 특별 위치 확장 가능</p>
+      </div>
+    </header>
+
+    <main class="grid-section">
+      <div id="slotGrid" class="slot-grid" aria-label="반려동물 슬롯 목록"></div>
+    </main>
+  </div>
+
+  <div id="imageModal" class="image-modal hidden" aria-hidden="true">
+    <button id="modalClose" class="modal-close" aria-label="확대 이미지 닫기">×</button>
+    <div class="image-modal__backdrop"></div>
+    <div class="image-modal__content">
+      <img id="modalImage" src="" alt="확대된 반려동물 사진" />
+      <div class="image-modal__caption">
+        <strong id="modalTitle"></strong>
+        <span id="modalDesc"></span>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
