@@ -1,4 +1,5 @@
 import { registeredPets } from './data.js';
+
 const TOTAL_SLOTS = 365;
 const HEADER_HEIGHT = 50;
 const GRID_PADDING = 12;
@@ -24,34 +25,24 @@ const premiumSlots = new Set([1, 365]);
 
 let selectedSlotNumber = null;
 
-/*
-  슬롯 번호 자동 입력용 구글폼 링크
-  entry.1362014499 = 슬롯 번호
-*/
 const FORM_URL_TEMPLATE =
   'https://docs.google.com/forms/d/e/1FAIpQLSdHOskkCylXlN5_4ugreP1Vx7fVnYPQ5btfu_07yBn7SdbuoA/viewform?usp=pp_url&entry.1362014499=__SLOT__';
 
-/*
-  샘플 등록 데이터
-  실제 운영할 때는 네가 승인한 슬롯만 여기에 넣거나
-  나중에 DB/JSON으로 빼면 됨
-*/
-
 function loadViewsFromStorage() {
   const savedViews = localStorage.getItem('petViews');
-  if (savedViews) {
-    const viewsData = JSON.parse(savedViews);
-    Object.keys(registeredPets).forEach(slotNumber => {
-      if (viewsData[slotNumber]) {
-        registeredPets[slotNumber].views = viewsData[slotNumber];
-      }
-    });
-  }
+  if (!savedViews) return;
+
+  const viewsData = JSON.parse(savedViews);
+  Object.keys(registeredPets).forEach((slotNumber) => {
+    if (viewsData[slotNumber] !== undefined) {
+      registeredPets[slotNumber].views = viewsData[slotNumber];
+    }
+  });
 }
 
 function saveViewsToStorage() {
   const viewsData = {};
-  Object.keys(registeredPets).forEach(slotNumber => {
+  Object.keys(registeredPets).forEach((slotNumber) => {
     viewsData[slotNumber] = registeredPets[slotNumber].views || 0;
   });
   localStorage.setItem('petViews', JSON.stringify(viewsData));
@@ -67,17 +58,21 @@ function getSlotBadgeText(type) {
   return '';
 }
 
-function getCrownIcon(slotNumber) {
-  const sortedPets = Object.entries(registeredPets)
+function getSortedPetsByViews() {
+  return Object.entries(registeredPets)
+    .slice()
     .sort((a, b) => (b[1].views || 0) - (a[1].views || 0));
-  
-  for (let i = 0; i < 3; i++) {
-    if (sortedPets[i] && parseInt(sortedPets[i][0]) === slotNumber) {
-      if (i === 0) return '👑'; // 1등 황금 왕관
-      if (i === 1) return '👑'; // 2등 은색 왕관
-      if (i === 2) return '👑'; // 3등 동색 왕관
-    }
+}
+
+function getCrownIcon(slotNumber) {
+  const rankIndex = getSortedPetsByViews().findIndex(
+    ([currentSlot]) => Number(currentSlot) === slotNumber
+  );
+
+  if (rankIndex >= 0 && rankIndex < 3) {
+    return '👑';
   }
+
   return '';
 }
 
@@ -90,7 +85,10 @@ function createSlotCard(slotNumber) {
 
   const badgeText = getSlotBadgeText(type);
   const crownIcon = pet ? getCrownIcon(slotNumber) : '';
-  const crownClass = crownIcon ? `rank-${Array.from(Object.entries(registeredPets).sort((a, b) => (b[1].views || 0) - (a[1].views || 0))).findIndex(entry => parseInt(entry[0]) === slotNumber) + 1}` : '';
+  const crownRank = crownIcon
+    ? getSortedPetsByViews().findIndex(([currentSlot]) => Number(currentSlot) === slotNumber) + 1
+    : 0;
+  const crownClass = crownRank ? `rank-${crownRank}` : '';
 
   card.innerHTML = `
     ${badgeText ? `<span class="slot-badge">${badgeText}</span>` : ''}
@@ -99,7 +97,7 @@ function createSlotCard(slotNumber) {
     ${
       pet
         ? `<img class="slot-image" src="${pet.image}" alt="${pet.name}" />`
-        : `<div class="slot-empty">빈 슬롯</div>`
+        : '<div class="slot-empty">빈 슬롯</div>'
     }
   `;
 
@@ -129,16 +127,20 @@ function renderSlots() {
 function updateRankingTicker() {
   if (!rankingTicker) return;
 
-  const sortedPets = Object.entries(registeredPets)
-    .slice()
-    .sort((a, b) => (b[1].views || 0) - (a[1].views || 0));
+  const topPets = getSortedPetsByViews().slice(0, 5);
+  const rankingItems = topPets
+    .map(
+      ([slotNumber, pet], index) =>
+        `<span class="rank-${index + 1}">${index + 1}등 #${slotNumber} ${pet.name}<span class="ticker-crown rank-${index + 1}">👑</span></span>`
+    )
+    .join('');
 
-  const topPets = sortedPets.slice(0, 5);
-  const rankingHTML = topPets
-    .map((pet, index) => `<span class="rank-${index + 1}">${index + 1}등 #${pet[0]} ${pet[1].name}<span class="ticker-crown rank-${index + 1}">👑</span></span>`)
-    .join('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
-
-  rankingTicker.innerHTML = rankingHTML;
+  rankingTicker.innerHTML = `
+    <div class="ranking-ticker__track">
+      <div class="ranking-ticker__group">${rankingItems}</div>
+      <div class="ranking-ticker__group" aria-hidden="true">${rankingItems}</div>
+    </div>
+  `;
 }
 
 function calculateBestGrid(total, width, height) {
@@ -182,14 +184,14 @@ function applyGridLayout() {
 function openImageModal(pet) {
   pet.views = (pet.views || 0) + 1;
   saveViewsToStorage();
-  updateRankingTicker();
+  renderSlots();
 
   modalImage.src = pet.image;
   modalImage.alt = pet.name;
   modalTitle.textContent = pet.name;
   modalDesc.textContent = pet.desc;
   if (modalViews) {
-    modalViews.textContent = `조회수 ${pet.views}회`;
+    modalViews.textContent = `조회수 ${pet.views}`;
   }
   imageModal.classList.remove('hidden');
   imageModal.setAttribute('aria-hidden', 'false');
