@@ -11,6 +11,7 @@ const modalTitle = document.getElementById('modalTitle');
 const modalDesc = document.getElementById('modalDesc');
 const modalViews = document.getElementById('modalViews');
 const modalClose = document.getElementById('modalClose');
+const rankingTicker = document.getElementById('rankingTicker');
 
 const requestModal = document.getElementById('requestModal');
 const requestSlotNumber = document.getElementById('requestSlotNumber');
@@ -39,27 +40,51 @@ const registeredPets = {
     name: '콩지',
     desc: '롱다리 강아지',
     image: 'https://i.postimg.cc/G2xd4Xks/kongji(175).jpg',
+    views: 320,
     registeredAt: Date.now()
   },
   4: {
     name: '산이',
     desc: '예산 효자골 풍산개',
     image: 'https://i.postimg.cc/QCQbK7yn/san-i(4).jpg',
+    views: 180,
     registeredAt: Date.now()
   },
   88: {
     name: '무지개8남매',
     desc: '탄이산이 새끼들',
     image: 'https://i.postimg.cc/d1KwjP0G/mujigae8nammae(88).jpg',
+    views: 120,
     registeredAt: Date.now()
   },
   103: {
     name: '탄이',
     desc: '예천 효자골 블랙탄 진돗개',
     image: 'https://i.postimg.cc/KY4h7cF9/tan-i(103).jpg',
+    views: 240,
     registeredAt: Date.now()
   }
 };
+
+function loadViewsFromStorage() {
+  const savedViews = localStorage.getItem('petViews');
+  if (savedViews) {
+    const viewsData = JSON.parse(savedViews);
+    Object.keys(registeredPets).forEach(slotNumber => {
+      if (viewsData[slotNumber]) {
+        registeredPets[slotNumber].views = viewsData[slotNumber];
+      }
+    });
+  }
+}
+
+function saveViewsToStorage() {
+  const viewsData = {};
+  Object.keys(registeredPets).forEach(slotNumber => {
+    viewsData[slotNumber] = registeredPets[slotNumber].views || 0;
+  });
+  localStorage.setItem('petViews', JSON.stringify(viewsData));
+}
 
 function getSlotType(slotNumber) {
   if (premiumSlots.has(slotNumber)) return 'premium';
@@ -93,10 +118,6 @@ function createSlotCard(slotNumber) {
   if (pet) {
     card.classList.add('has-image');
     card.addEventListener('click', () => openImageModal(pet));
-    const image = card.querySelector('.slot-image');
-    if (image) {
-      image.addEventListener('click', () => openImageModal(pet));
-    }
   } else {
     card.classList.add('is-empty');
     card.addEventListener('click', () => openRequestModal(slotNumber));
@@ -114,6 +135,22 @@ function renderSlots() {
 
   slotGrid.innerHTML = '';
   slotGrid.appendChild(fragment);
+  updateRankingTicker();
+}
+
+function updateRankingTicker() {
+  if (!rankingTicker) return;
+
+  const sortedPets = Object.values(registeredPets)
+    .slice()
+    .sort((a, b) => (b.views || 0) - (a.views || 0));
+
+  const topPets = sortedPets.slice(0, 5);
+  const rankingHTML = topPets
+    .map((pet, index) => `<span class="rank-${index + 1}">${index + 1}등 ${pet.name}</span>`)
+    .join('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+
+  rankingTicker.innerHTML = rankingHTML;
 }
 
 function calculateBestGrid(total, width, height) {
@@ -155,12 +192,16 @@ function applyGridLayout() {
 }
 
 function openImageModal(pet) {
+  pet.views = (pet.views || 0) + 1;
+  saveViewsToStorage();
+  updateRankingTicker();
+
   modalImage.src = pet.image;
   modalImage.alt = pet.name;
   modalTitle.textContent = pet.name;
   modalDesc.textContent = pet.desc;
   if (modalViews) {
-    modalViews.textContent = `조회수 ${pet.views || 0}회`;
+    modalViews.textContent = `조회수 ${pet.views}회`;
   }
   imageModal.classList.remove('hidden');
   imageModal.setAttribute('aria-hidden', 'false');
@@ -232,5 +273,6 @@ window.addEventListener('keydown', (event) => {
 
 window.addEventListener('resize', applyGridLayout);
 
+loadViewsFromStorage();
 renderSlots();
 applyGridLayout();
