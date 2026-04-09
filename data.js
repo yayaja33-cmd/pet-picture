@@ -1,7 +1,7 @@
 export const registeredPets = {
   4: {
     name: '산이',
-    desc: '예산에서 온 작고 소중한 강아지',
+    desc: '예천에서 온 작고 소중한 강아지',
     image: 'https://i.postimg.cc/QCQbK7yn/san-i(4).jpg',
     views: 0,
     registeredAt: Date.now()
