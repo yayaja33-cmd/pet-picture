@@ -200,18 +200,31 @@ button {
 .image-modal__caption {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   color: #e5e7eb;
   text-align: center;
 }
 
-.image-modal__caption strong {
-  font-size: 18px;
+.image-modal__header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  position: relative;
 }
 
-.image-modal__caption span {
-  font-size: 14px;
+.image-modal__header strong {
+  flex: 1;
+  text-align: center;
+}
+
+.modal-views {
+  position: absolute;
+  right: 0;
+  font-size: 13px;
   color: #cbd5e1;
+  white-space: nowrap;
 }
 
 .modal-close {

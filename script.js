@@ -9,6 +9,7 @@ const imageModal = document.getElementById('imageModal');
 const modalImage = document.getElementById('modalImage');
 const modalTitle = document.getElementById('modalTitle');
 const modalDesc = document.getElementById('modalDesc');
+const modalViews = document.getElementById('modalViews');
 const modalClose = document.getElementById('modalClose');
 
 const requestModal = document.getElementById('requestModal');
@@ -39,6 +40,24 @@ const registeredPets = {
     desc: '롱다리 강아지',
     image: 'https://i.postimg.cc/G2xd4Xks/kongji(175).jpg',
     registeredAt: Date.now()
+  },
+  4: {
+    name: '산이',
+    desc: '예산 효자골 풍산개',
+    image: 'https://i.postimg.cc/QCQbK7yn/san-i(4).jpg',
+    registeredAt: Date.now()
+  },
+  88: {
+    name: '무지개8남매',
+    desc: '탄이산이 새끼들',
+    image: 'https://i.postimg.cc/d1KwjP0G/mujigae8nammae(88).jpg',
+    registeredAt: Date.now()
+  },
+  103: {
+    name: '탄이',
+    desc: '예천 효자골 블랙탄 진돗개',
+    image: 'https://i.postimg.cc/KY4h7cF9/tan-i(103).jpg',
+    registeredAt: Date.now()
   }
 };
 
@@ -48,7 +67,7 @@ function getSlotType(slotNumber) {
 }
 
 function getSlotBadgeText(type) {
-  if (type === 'premium') return '유료';
+  if (type === 'premium') return 'Premium';
   return '';
 }
 
@@ -74,6 +93,10 @@ function createSlotCard(slotNumber) {
   if (pet) {
     card.classList.add('has-image');
     card.addEventListener('click', () => openImageModal(pet));
+    const image = card.querySelector('.slot-image');
+    if (image) {
+      image.addEventListener('click', () => openImageModal(pet));
+    }
   } else {
     card.classList.add('is-empty');
     card.addEventListener('click', () => openRequestModal(slotNumber));
@@ -136,6 +159,9 @@ function openImageModal(pet) {
   modalImage.alt = pet.name;
   modalTitle.textContent = pet.name;
   modalDesc.textContent = pet.desc;
+  if (modalViews) {
+    modalViews.textContent = `조회수 ${pet.views || 0}회`;
+  }
   imageModal.classList.remove('hidden');
   imageModal.setAttribute('aria-hidden', 'false');
 }

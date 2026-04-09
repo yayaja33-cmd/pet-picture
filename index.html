@@ -11,7 +11,7 @@
     <header class="top-bar">
       <div class="top-bar__inner">
         <h1>반려동물 사진 등록 슬롯</h1>
-        <p>빈칸 클릭 시 신청 가능 / 1번, 365번은 유료 슬롯</p>
+        <p>빈칸 클릭 시 신청 가능 / 1번, 365번은 Premium 슬롯</p>
       </div>
     </header>
 
@@ -27,7 +27,10 @@
     <div class="image-modal__content">
       <img id="modalImage" src="" alt="확대된 반려동물 사진" />
       <div class="image-modal__caption">
-        <strong id="modalTitle"></strong>
+        <div class="image-modal__header">
+          <strong id="modalTitle"></strong>
+          <span id="modalViews" class="modal-views"></span>
+        </div>
         <span id="modalDesc"></span>
       </div>
     </div>
