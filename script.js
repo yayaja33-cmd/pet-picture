@@ -40,28 +40,28 @@ const registeredPets = {
     name: '콩지',
     desc: '롱다리 강아지',
     image: 'https://i.postimg.cc/G2xd4Xks/kongji(175).jpg',
-    views: 320,
+    views: 0,
     registeredAt: Date.now()
   },
   4: {
     name: '산이',
     desc: '예산 효자골 풍산개',
     image: 'https://i.postimg.cc/QCQbK7yn/san-i(4).jpg',
-    views: 180,
+    views: 0,
     registeredAt: Date.now()
   },
   88: {
     name: '무지개8남매',
     desc: '탄이산이 새끼들',
     image: 'https://i.postimg.cc/d1KwjP0G/mujigae8nammae(88).jpg',
-    views: 120,
+    views: 0,
     registeredAt: Date.now()
   },
   103: {
     name: '탄이',
     desc: '예천 효자골 블랙탄 진돗개',
     image: 'https://i.postimg.cc/KY4h7cF9/tan-i(103).jpg',
-    views: 240,
+    views: 0,
     registeredAt: Date.now()
   }
 };
@@ -96,6 +96,20 @@ function getSlotBadgeText(type) {
   return '';
 }
 
+function getCrownIcon(slotNumber) {
+  const sortedPets = Object.entries(registeredPets)
+    .sort((a, b) => (b[1].views || 0) - (a[1].views || 0));
+  
+  for (let i = 0; i < 3; i++) {
+    if (sortedPets[i] && parseInt(sortedPets[i][0]) === slotNumber) {
+      if (i === 0) return '👑'; // 1등 황금 왕관
+      if (i === 1) return '👑'; // 2등 은색 왕관
+      if (i === 2) return '👑'; // 3등 동색 왕관
+    }
+  }
+  return '';
+}
+
 function createSlotCard(slotNumber) {
   const type = getSlotType(slotNumber);
   const pet = registeredPets[slotNumber];
@@ -104,9 +118,12 @@ function createSlotCard(slotNumber) {
   card.className = `slot-card ${type}`;
 
   const badgeText = getSlotBadgeText(type);
+  const crownIcon = pet ? getCrownIcon(slotNumber) : '';
+  const crownClass = crownIcon ? `rank-${Array.from(Object.entries(registeredPets).sort((a, b) => (b[1].views || 0) - (a[1].views || 0))).findIndex(entry => parseInt(entry[0]) === slotNumber) + 1}` : '';
 
   card.innerHTML = `
     ${badgeText ? `<span class="slot-badge">${badgeText}</span>` : ''}
+    ${crownIcon ? `<span class="crown-icon ${crownClass}">${crownIcon}</span>` : ''}
     <span class="slot-number">#${slotNumber}</span>
     ${
       pet
@@ -141,13 +158,13 @@ function renderSlots() {
 function updateRankingTicker() {
   if (!rankingTicker) return;
 
-  const sortedPets = Object.values(registeredPets)
+  const sortedPets = Object.entries(registeredPets)
     .slice()
-    .sort((a, b) => (b.views || 0) - (a.views || 0));
+    .sort((a, b) => (b[1].views || 0) - (a[1].views || 0));
 
   const topPets = sortedPets.slice(0, 5);
   const rankingHTML = topPets
-    .map((pet, index) => `<span class="rank-${index + 1}">${index + 1}등 ${pet.name}</span>`)
+    .map((pet, index) => `<span class="rank-${index + 1}">${index + 1}등 #${pet[0]} ${pet[1].name}<span class="ticker-crown rank-${index + 1}">👑</span></span>`)
     .join('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
 
   rankingTicker.innerHTML = rankingHTML;
@@ -273,6 +290,7 @@ window.addEventListener('keydown', (event) => {
 
 window.addEventListener('resize', applyGridLayout);
 
+localStorage.clear();
 loadViewsFromStorage();
 renderSlots();
 applyGridLayout();
