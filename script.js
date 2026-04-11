@@ -1,9 +1,11 @@
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 import { registeredPets } from './data.js';
 
 const TOTAL_SLOTS = 365;
 const HEADER_HEIGHT = 50;
 const GRID_PADDING = 12;
 const GRID_GAP = 4;
+const VIEW_REFRESH_MS = 10000;
 
 const slotGrid = document.getElementById('slotGrid');
 const topBar = document.querySelector('.top-bar');
@@ -28,24 +30,77 @@ let selectedSlotNumber = null;
 const FORM_URL_TEMPLATE =
   'https://docs.google.com/forms/d/e/1FAIpQLSdHOskkCylXlN5_4ugreP1Vx7fVnYPQ5btfu_07yBn7SdbuoA/viewform?usp=pp_url&entry.1362014499=__SLOT__';
 
-function loadViewsFromStorage() {
-  const savedViews = localStorage.getItem('petViews');
-  if (!savedViews) return;
+const SUPABASE_URL = 'https://gvcmbuvtetttwqudkagi.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd2Y21idXZ0ZXR0dHdxdWRrYWdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MDg4NjcsImV4cCI6MjA5MTQ4NDg2N30.ZDmZTxJ_ej5Dqzg5P0ppt9j9Ca8YuuMjFeIyolcohK4';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const viewsData = JSON.parse(savedViews);
-  Object.keys(registeredPets).forEach((slotNumber) => {
-    if (viewsData[slotNumber] !== undefined) {
-      registeredPets[slotNumber].views = viewsData[slotNumber];
-    }
+function applyViewRows(viewRows = []) {
+  const viewMap = new Map(
+    viewRows.map((row) => [Number(row.slot_number), Number(row.views) || 0])
+  );
+
+  Object.entries(registeredPets).forEach(([slotNumber, pet]) => {
+    pet.views = viewMap.get(Number(slotNumber)) ?? pet.views ?? 0;
   });
 }
 
-function saveViewsToStorage() {
-  const viewsData = {};
-  Object.keys(registeredPets).forEach((slotNumber) => {
-    viewsData[slotNumber] = registeredPets[slotNumber].views || 0;
-  });
-  localStorage.setItem('petViews', JSON.stringify(viewsData));
+async function loadViewsFromSupabase() {
+  const slotNumbers = Object.keys(registeredPets).map(Number);
+
+  const { data, error } = await supabase
+    .from('pet_views')
+    .select('slot_number, views')
+    .in('slot_number', slotNumbers);
+
+  if (error) {
+    console.error('Supabase 조회수 로딩 실패:', error.message);
+    return;
+  }
+
+  const rows = data ?? [];
+  applyViewRows(rows);
+
+  const missingRows = slotNumbers
+    .filter((slotNumber) => !rows.some((row) => Number(row.slot_number) === slotNumber))
+    .map((slotNumber) => ({
+      slot_number: slotNumber,
+      views: registeredPets[slotNumber]?.views ?? 0
+    }));
+
+  if (missingRows.length > 0) {
+    const { error: seedError } = await supabase
+      .from('pet_views')
+      .upsert(missingRows, { onConflict: 'slot_number' });
+
+    if (seedError) {
+      console.error('Supabase 기본 조회수 생성 실패:', seedError.message);
+    }
+  }
+}
+
+async function incrementPetView(slotNumber) {
+  const { data, error } = await supabase
+    .from('pet_views')
+    .select('views')
+    .eq('slot_number', slotNumber)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Supabase 조회수 조회 실패:', error.message);
+  }
+
+  const nextViews = (data?.views ?? registeredPets[slotNumber]?.views ?? 0) + 1;
+  registeredPets[slotNumber].views = nextViews;
+
+  const { error: upsertError } = await supabase
+    .from('pet_views')
+    .upsert({ slot_number: slotNumber, views: nextViews }, { onConflict: 'slot_number' });
+
+  if (upsertError) {
+    console.error('Supabase 조회수 저장 실패:', upsertError.message);
+  }
+
+  return nextViews;
 }
 
 function getSlotType() {
@@ -101,7 +156,9 @@ function createSlotCard(slotNumber) {
 
   if (pet) {
     card.classList.add('has-image');
-    card.addEventListener('click', () => openImageModal(pet));
+    card.addEventListener('click', () => {
+      void openImageModal(slotNumber, pet);
+    });
   } else {
     card.classList.add('is-empty');
     card.addEventListener('click', () => openRequestModal(slotNumber));
@@ -183,20 +240,22 @@ function applyGridLayout() {
   slotGrid.style.gridTemplateRows = `repeat(${rows}, ${cellSize}px)`;
 }
 
-function openImageModal(pet) {
-  pet.views = (pet.views || 0) + 1;
-  saveViewsToStorage();
-  renderSlots();
-
+async function openImageModal(slotNumber, pet) {
   modalImage.src = pet.image;
   modalImage.alt = pet.name;
   modalTitle.textContent = pet.name;
   modalDesc.textContent = pet.desc;
   if (modalViews) {
-    modalViews.textContent = `조회수 ${pet.views}`;
+    modalViews.textContent = `조회수 ${pet.views || 0}`;
   }
   imageModal.classList.remove('hidden');
   imageModal.setAttribute('aria-hidden', 'false');
+
+  const updatedViews = await incrementPetView(slotNumber);
+  if (modalViews) {
+    modalViews.textContent = `조회수 ${updatedViews}`;
+  }
+  renderSlots();
 }
 
 function closeImageModal() {
@@ -265,6 +324,19 @@ window.addEventListener('keydown', (event) => {
 
 window.addEventListener('resize', applyGridLayout);
 
-loadViewsFromStorage();
-renderSlots();
-applyGridLayout();
+async function initializeApp() {
+  renderSlots();
+  applyGridLayout();
+
+  await loadViewsFromSupabase();
+  renderSlots();
+  applyGridLayout();
+
+  window.setInterval(() => {
+    void loadViewsFromSupabase().then(() => {
+      renderSlots();
+    });
+  }, VIEW_REFRESH_MS);
+}
+
+void initializeApp();
