@@ -8,7 +8,6 @@ const GRID_GAP = 4;
 const slotGrid = document.getElementById('slotGrid');
 const topBar = document.querySelector('.top-bar');
 const adBanner = document.querySelector('.ad-banner');
-const siteFooter = document.querySelector('.site-footer');
 
 const imageModal = document.getElementById('imageModal');
 const modalImage = document.getElementById('modalImage');
@@ -166,8 +165,7 @@ function calculateBestGrid(total, width, height) {
 function applyGridLayout() {
   const topBarHeight = topBar?.offsetHeight || HEADER_HEIGHT;
   const adBannerHeight = adBanner?.offsetHeight || 0;
-  const siteFooterHeight = siteFooter?.offsetHeight || 0;
-  const reservedHeight = topBarHeight + adBannerHeight + siteFooterHeight + 12;
+  const reservedHeight = topBarHeight + adBannerHeight + 12;
 
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight - reservedHeight;

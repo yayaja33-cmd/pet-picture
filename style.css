@@ -62,6 +62,14 @@ button {
   white-space: nowrap;
 }
 
+.header-copy {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+}
+
 .brand-logo {
   display: inline-flex;
   align-items: center;
@@ -96,7 +104,6 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
   min-width: 0;
-  flex: 1 1 auto;
 }
 
 .ranking-ticker {
@@ -252,14 +259,16 @@ button {
 
 .site-footer {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: #0f172a;
-  font-size: 12px;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  font-size: 11px;
   color: #94a3b8;
+}
+
+.site-footer span {
+  opacity: 0.5;
 }
 
 .site-footer a {
@@ -621,7 +630,7 @@ button {
     white-space: normal;
   }
 
-  .top-bar__inner p {
+  .header-copy {
     order: 3;
     flex: 1 0 100%;
   }
