@@ -22,8 +22,6 @@ const requestModalClose = document.getElementById('requestModalClose');
 const goToFormButton = document.getElementById('goToFormButton');
 const cancelFormButton = document.getElementById('cancelFormButton');
 
-const premiumSlots = new Set([1, 365]);
-
 let selectedSlotNumber = null;
 
 const FORM_URL_TEMPLATE =
@@ -49,13 +47,11 @@ function saveViewsToStorage() {
   localStorage.setItem('petViews', JSON.stringify(viewsData));
 }
 
-function getSlotType(slotNumber) {
-  if (premiumSlots.has(slotNumber)) return 'premium';
+function getSlotType() {
   return 'basic';
 }
 
-function getSlotBadgeText(type) {
-  if (type === 'premium') return 'Premium';
+function getSlotBadgeText() {
   return '';
 }
 
