@@ -10,11 +10,20 @@
   <div class="page">
     <header class="top-bar">
       <div class="top-bar__inner">
-        <h1>펫보드 (PetBoard)</h1>
-        <p>빈칸 클릭 시 신청 가능</p>
+        <a class="brand-logo" href="index.html" aria-label="펫보드 홈">
+          <img src="petboard-logo.svg" alt="펫보드 (PetBoard)" />
+        </a>
+        <p>빈 슬롯 클릭 시 등록 신청 가능</p>
         <div id="rankingTicker" class="ranking-ticker" aria-label="조회수 순위"></div>
       </div>
     </header>
+
+    <section class="ad-banner" aria-label="광고 영역">
+      <div class="ad-banner__inner">
+        <span class="ad-banner__label">AD</span>
+        <span class="ad-banner__text">이 영역에 AdSense 광고가 들어갑니다</span>
+      </div>
+    </section>
 
     <main class="grid-section">
       <div id="slotGrid" class="slot-grid" aria-label="반려동물 슬롯 목록"></div>

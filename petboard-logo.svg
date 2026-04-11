@@ -1,0 +1,52 @@
+<svg width="420" height="110" viewBox="0 0 420 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="24" y1="16" x2="396" y2="94" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="0.55" stop-color="#1E293B"/>
+      <stop offset="1" stop-color="#312E81"/>
+    </linearGradient>
+    <linearGradient id="stroke" x1="36" y1="18" x2="379" y2="102" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7DD3FC" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#C084FC" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="text" x1="120" y1="34" x2="300" y2="78" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FAFC"/>
+      <stop offset="0.5" stop-color="#7DD3FC"/>
+      <stop offset="1" stop-color="#F9A8D4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(70 38) rotate(43) scale(70 70)">
+      <stop stop-color="#7DD3FC" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#7DD3FC" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="0" y="0" width="420" height="110" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="8"/>
+      <feGaussianBlur stdDeviation="8"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.00784314 0 0 0 0 0.0235294 0 0 0 0 0.0901961 0 0 0 0.35 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <rect x="10" y="10" width="400" height="90" rx="28" fill="url(#bg)"/>
+    <rect x="10.75" y="10.75" width="398.5" height="88.5" rx="27.25" stroke="url(#stroke)" stroke-opacity="0.55" stroke-width="1.5"/>
+    <circle cx="78" cy="44" r="58" fill="url(#glow)"/>
+
+    <g transform="translate(28 15) scale(1.12)">
+      <ellipse cx="30" cy="42" rx="18" ry="15" fill="#F8FAFC"/>
+      <ellipse cx="10" cy="24" rx="8" ry="11" fill="#7DD3FC"/>
+      <ellipse cx="24" cy="14" rx="8" ry="11" fill="#C084FC"/>
+      <ellipse cx="40" cy="14" rx="8" ry="11" fill="#F9A8D4"/>
+      <ellipse cx="54" cy="24" rx="8" ry="11" fill="#93C5FD"/>
+      <path d="M24 38C28 34 33 34 36 38" stroke="#1E293B" stroke-width="2.8" stroke-linecap="round"/>
+      <circle cx="25" cy="41" r="2.6" fill="#0F172A"/>
+      <circle cx="36" cy="41" r="2.6" fill="#0F172A"/>
+    </g>
+
+    <text x="112" y="58" fill="url(#text)" font-size="38" font-weight="800" letter-spacing="-0.04em" font-family="Segoe UI, Malgun Gothic, Arial, sans-serif">펫보드</text>
+    <text x="115" y="81" fill="#BFDBFE" fill-opacity="0.95" font-size="15" font-weight="700" letter-spacing="0.18em" font-family="Segoe UI, Arial, sans-serif">PETBOARD</text>
+  </g>
+</svg>
