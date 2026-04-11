@@ -102,8 +102,10 @@ button {
 .ranking-ticker {
   position: relative;
   z-index: 20;
-  flex: 0 0 auto;
-  width: clamp(360px, 68vw, 880px);
+  flex: 0 1 auto;
+  width: min(100%, 880px);
+  max-width: 100%;
+  min-width: 0;
   margin-left: auto;
   padding: 7px 12px;
   border: 1px solid rgba(125, 211, 252, 0.16);
@@ -610,4 +612,112 @@ button {
   color: #fff;
   font-size: 24px;
   cursor: pointer;
+}
+
+@media (max-width: 960px) {
+  .top-bar__inner {
+    flex-wrap: wrap;
+    row-gap: 8px;
+    white-space: normal;
+  }
+
+  .top-bar__inner p {
+    order: 3;
+    flex: 1 0 100%;
+  }
+
+  .ranking-ticker {
+    order: 4;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .ad-banner {
+    padding: 8px 12px 0;
+  }
+
+  .grid-section {
+    padding: 8px 0 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .top-bar {
+    padding: 6px 10px;
+  }
+
+  .brand-logo img {
+    height: 48px;
+    max-width: 78vw;
+  }
+
+  .page-title {
+    font-size: 18px;
+  }
+
+  .top-bar__inner p {
+    font-size: 11px;
+  }
+
+  .ranking-ticker {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .rank-1 {
+    font-size: 24px;
+  }
+
+  .rank-2 {
+    font-size: 20px;
+  }
+
+  .rank-3 {
+    font-size: 17px;
+  }
+
+  .rank-4,
+  .rank-5 {
+    font-size: 13px;
+  }
+
+  .ad-banner__inner {
+    min-height: 72px;
+    flex-direction: column;
+    text-align: center;
+    padding: 12px;
+  }
+
+  .slot-grid {
+    padding: 4px;
+  }
+
+  .site-footer {
+    flex-wrap: wrap;
+    text-align: center;
+  }
+
+  .image-modal__content {
+    width: 96vw;
+    margin-top: 3vh;
+  }
+
+  .image-modal__header {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .modal-views {
+    position: static;
+  }
+
+  .request-modal__content {
+    width: min(94vw, 440px);
+    margin-top: 8vh;
+    padding: 20px 16px 16px;
+  }
+
+  .request-modal__actions {
+    flex-direction: column;
+  }
 }
