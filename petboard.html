@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>펫보드 (PetBoard) | UtilBox</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="top-bar">
+      <div class="top-bar__inner">
+        <a class="brand-logo" href="index.html" aria-label="UtilBox 홈">
+          <img src="petboard-logo.svg" alt="펫보드 (PetBoard)" />
+        </a>
+        <div class="header-copy">
+          <p>빈 슬롯 클릭 시 등록 신청 가능</p>
+          <footer class="site-footer">
+            <a href="guide.html">이용 가이드</a>
+            <span>|</span>
+            <a href="about.html">소개</a>
+            <span>|</span>
+            <a href="privacy.html">개인정보 처리방침</a>
+          </footer>
+        </div>
+        <div id="rankingTicker" class="ranking-ticker" aria-label="조회수 순위"></div>
+      </div>
+    </header>
+
+    <section class="ad-banner" aria-label="광고 영역">
+      <div class="ad-banner__inner">
+        <span class="ad-banner__label">AD</span>
+        <span class="ad-banner__text">이 영역에 AdSense 광고가 들어갑니다</span>
+      </div>
+    </section>
+
+    <main class="grid-section">
+      <div id="slotGrid" class="slot-grid" aria-label="반려동물 슬롯 목록"></div>
+    </main>
+
+  </div>
+
+  <div id="imageModal" class="image-modal hidden" aria-hidden="true">
+    <button id="modalClose" class="modal-close" aria-label="상세 이미지 닫기">×</button>
+    <div class="image-modal__backdrop"></div>
+    <div class="image-modal__content">
+      <img id="modalImage" src="" alt="선택한 반려동물 사진" />
+      <div class="image-modal__caption">
+        <div class="image-modal__header">
+          <strong id="modalTitle"></strong>
+          <span id="modalViews" class="modal-views"></span>
+        </div>
+        <span id="modalDesc"></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="requestModal" class="request-modal hidden" aria-hidden="true">
+    <div class="request-modal__backdrop"></div>
+
+    <div class="request-modal__content">
+      <button id="requestModalClose" class="request-modal__close" aria-label="닫기">×</button>
+
+      <h2>슬롯 신청</h2>
+      <p>선택한 슬롯: <strong id="requestSlotNumber"></strong></p>
+
+      <p class="request-modal__desc">
+        확인 버튼을 누르면 구글폼으로 이동합니다.<br />
+        사진 파일 업로드가 아니라 사진 URL로 제출해 주세요.
+      </p>
+
+      <div class="request-guide">
+        <strong>사진 URL 만드는 방법</strong>
+        <span>
+          이미지를 포스트이미지 등에 업로드한 뒤, 해당 사진의 직접 링크 주소를 복사해서
+          구글폼의 사진 URL 칸에 붙여 넣어 주세요.
+        </span>
+      </div>
+
+      <div class="request-modal__actions">
+        <button id="goToFormButton" class="request-modal__primary">구글폼으로 신청하기</button>
+        <button id="cancelFormButton" class="request-modal__secondary">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

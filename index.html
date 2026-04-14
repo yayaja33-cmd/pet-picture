@@ -3,88 +3,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>펫보드 (PetBoard)</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>UtilBox | 실험 페이지 허브</title>
+  <meta name="description" content="UtilBox는 실험용 웹페이지와 유틸리티 데모를 모아 관리하는 개인 프로젝트 허브입니다." />
+  <link rel="stylesheet" href="utilbox.css" />
 </head>
 <body>
-  <div class="page">
-    <header class="top-bar">
-      <div class="top-bar__inner">
-        <a class="brand-logo" href="index.html" aria-label="펫보드 홈">
-          <img src="petboard-logo.svg" alt="펫보드 (PetBoard)" />
-        </a>
-        <div class="header-copy">
-          <p>빈 슬롯 클릭 시 등록 신청 가능</p>
-          <footer class="site-footer">
-            <a href="guide.html">이용 가이드</a>
-            <span>|</span>
-            <a href="about.html">소개</a>
-            <span>|</span>
-            <a href="privacy.html">개인정보 처리방침</a>
-          </footer>
-        </div>
-        <div id="rankingTicker" class="ranking-ticker" aria-label="조회수 순위"></div>
-      </div>
-    </header>
+  <header class="site-header">
+    <div class="layout">
+      <a class="brand" href="index.html" aria-label="UtilBox 홈">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-name">UtilBox</span>
+      </a>
+      <nav class="main-nav" aria-label="주요 메뉴">
+        <a class="active" href="index.html">메인</a>
+        <a href="tools.html">테스트 페이지</a>
+        <a href="guide.html">운영 가이드</a>
+        <a href="about.html">소개</a>
+        <a href="privacy.html">정책</a>
+      </nav>
+    </div>
+  </header>
 
-    <section class="ad-banner" aria-label="광고 영역">
-      <div class="ad-banner__inner">
-        <span class="ad-banner__label">AD</span>
-        <span class="ad-banner__text">이 영역에 AdSense 광고가 들어갑니다</span>
+  <main class="layout">
+    <section class="hero">
+      <div class="hero-grid">
+        <article class="panel hero-copy">
+          <span class="kicker">UTILITY LAB HUB</span>
+          <h1>하나의 메인에서<br />테스트 페이지를 체계적으로 관리합니다.</h1>
+          <p>
+            UtilBox는 실험용 서비스, 유틸성 기능, 콘텐츠 페이지를 한곳에서 관리하기 위한 허브입니다.
+            페이지 구조를 분리하고 정책/가이드를 함께 제공해 배포 품질을 꾸준히 높이는 것을 목표로 합니다.
+          </p>
+          <div class="hero-links">
+            <a class="btn primary" href="tools.html">테스트 목록 보기</a>
+            <a class="btn ghost" href="petboard.html">펫보드 바로가기</a>
+          </div>
+        </article>
+
+        <aside class="panel stat-list" aria-label="사이트 구성 정보">
+          <div class="stat-item">
+            <strong>01</strong>
+            메인 허브 페이지
+          </div>
+          <div class="stat-item">
+            <strong>03+</strong>
+            정책/안내 서브페이지
+          </div>
+          <div class="stat-item">
+            <strong>LAB</strong>
+            실험형 도구 페이지 확장 가능
+          </div>
+        </aside>
       </div>
     </section>
 
-    <main class="grid-section">
-      <div id="slotGrid" class="slot-grid" aria-label="반려동물 슬롯 목록"></div>
-    </main>
-
-  </div>
-
-  <div id="imageModal" class="image-modal hidden" aria-hidden="true">
-    <button id="modalClose" class="modal-close" aria-label="상세 이미지 닫기">×</button>
-    <div class="image-modal__backdrop"></div>
-    <div class="image-modal__content">
-      <img id="modalImage" src="" alt="선택한 반려동물 사진" />
-      <div class="image-modal__caption">
-        <div class="image-modal__header">
-          <strong id="modalTitle"></strong>
-          <span id="modalViews" class="modal-views"></span>
-        </div>
-        <span id="modalDesc"></span>
+    <section class="section" aria-labelledby="featured-pages">
+      <h2 id="featured-pages">대표 페이지</h2>
+      <div class="card-grid">
+        <a class="card" href="petboard.html">
+          <h3>펫보드</h3>
+          <p>슬롯 기반 반려동물 갤러리 테스트 서비스입니다. 조회수 랭킹과 등록 신청 플로우를 실험합니다.</p>
+        </a>
+        <a class="card" href="guide.html">
+          <h3>운영 가이드</h3>
+          <p>사이트 목적, 운영 범위, 테스트 정책을 문서화한 페이지입니다. 방문자와 심사 관점에서 맥락을 제공합니다.</p>
+        </a>
+        <a class="card" href="privacy.html">
+          <h3>개인정보 처리방침</h3>
+          <p>쿠키 및 외부 광고 사용 가능성 등 정책 정보를 고지하는 페이지입니다.</p>
+        </a>
       </div>
+      <div class="ad-slot" aria-label="광고 영역">AdSense 배너 영역 (메인)</div>
+    </section>
+  </main>
+
+  <footer class="layout site-footer">
+    <div>© 2026 UtilBox. All rights reserved.</div>
+    <div>
+      <a href="about.html">소개</a>
+      <a href="contact.html">문의</a>
+      <a href="privacy.html">개인정보 처리방침</a>
     </div>
-  </div>
-
-  <div id="requestModal" class="request-modal hidden" aria-hidden="true">
-    <div class="request-modal__backdrop"></div>
-
-    <div class="request-modal__content">
-      <button id="requestModalClose" class="request-modal__close" aria-label="닫기">×</button>
-
-      <h2>슬롯 신청</h2>
-      <p>선택한 슬롯: <strong id="requestSlotNumber"></strong></p>
-
-      <p class="request-modal__desc">
-        확인 버튼을 누르면 구글폼으로 이동합니다.<br />
-        사진 파일 업로드가 아니라 사진 URL로 제출해 주세요.
-      </p>
-
-      <div class="request-guide">
-        <strong>사진 URL 만드는 방법</strong>
-        <span>
-          이미지를 포스트이미지 등에 업로드한 뒤, 해당 사진의 직접 링크 주소를 복사해서
-          구글폼의 사진 URL 칸에 붙여 넣어 주세요.
-        </span>
-      </div>
-
-      <div class="request-modal__actions">
-        <button id="goToFormButton" class="request-modal__primary">구글폼으로 신청하기</button>
-        <button id="cancelFormButton" class="request-modal__secondary">취소</button>
-      </div>
-    </div>
-  </div>
-
-  <script type="module" src="script.js"></script>
+  </footer>
 </body>
 </html>
 
