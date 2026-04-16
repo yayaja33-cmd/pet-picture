@@ -23,62 +23,79 @@
     </div>
   </header>
 
-  <main class="layout">
-    <section class="hero">
-      <div class="hero-grid">
-        <article class="panel hero-copy">
-          <span class="kicker">UTILITY TOOLBOX HUB</span>
-          <h1>필요한 웹 도구를<br />한 화면에서 바로 실행합니다.</h1>
-          <p>
-            UtilBox는 기능별 도구를 빠르게 찾아 실행할 수 있도록 구성한 작업 허브입니다.
-            자주 쓰는 기능을 중심으로 배치해 탐색 시간을 줄이고, 운영 문서와 실사용 페이지를 한 흐름에서 연결합니다.
-          </p>
-          <div class="hero-links">
-            <a class="btn primary" href="tools.html">도구 전체 보기</a>
-            <a class="btn ghost" href="petboard.html">펫보드 바로가기</a>
-          </div>
-        </article>
+  <div class="page-frame">
+    <aside class="side-ad side-ad--left" aria-label="왼쪽 광고 영역">
+      <div class="side-ad__box">AdSense 사이드 영역 (좌)</div>
+    </aside>
 
-        <aside class="panel stat-list" aria-label="사이트 구성 정보">
-          <div class="stat-item">
-            <strong>FAST</strong>
-            페이지 이동 없이 핵심 도구로 빠른 진입
-          </div>
-          <div class="stat-item">
-            <strong>READY</strong>
-            운영 문서와 기능 페이지를 즉시 연결
-          </div>
-          <div class="stat-item">
-            <strong>EXPAND</strong>
-            새 도구를 카드 단위로 지속 확장 가능
-          </div>
-        </aside>
-      </div>
-    </section>
+    <main class="layout">
+      <section class="hero">
+        <div class="hero-grid">
+          <article class="panel hero-copy">
+            <span class="kicker">UTILITY TOOLBOX HUB</span>
+            <h1>필요한 웹 도구를<br />한 화면에서 바로 실행합니다.</h1>
+            <p>
+              UtilBox는 기능별 도구를 빠르게 찾아 실행할 수 있도록 구성한 작업 허브입니다.
+              자주 쓰는 기능을 중심으로 배치해 탐색 시간을 줄이고, 운영 문서와 실사용 페이지를 한 흐름에서 연결합니다.
+            </p>
+            <div class="hero-links">
+              <a class="btn primary" href="tools.html">도구 전체 보기</a>
+              <a class="btn ghost" href="petboard.html">펫보드 바로가기</a>
+            </div>
+          </article>
 
-    <section class="section" aria-labelledby="featured-tools">
-      <h2 id="featured-tools">빠른 실행 도구</h2>
-      <div class="card-grid tool-grid">
-        <a class="card" href="petboard.html">
-          <h3>펫보드</h3>
-          <p>반려동물 이미지를 슬롯 기반으로 관리하고 조회수 랭킹을 확인하는 대표 도구입니다.</p>
-        </a>
-        <a class="card" href="tools.html">
-          <h3>유틸 리스트</h3>
-          <p>현재 제공 중인 각종 기능 페이지를 한 번에 모아보고 원하는 도구로 바로 이동할 수 있습니다.</p>
-        </a>
-        <a class="card" href="guide.html">
-          <h3>운영 가이드</h3>
-          <p>도구 사용 흐름, 운영 목적, 페이지 구성 원칙을 정리한 문서입니다.</p>
-        </a>
-        <a class="card" href="index.html">
-          <h3>메인 대시보드</h3>
-          <p>실행 빈도가 높은 기능부터 배치한 시작 화면입니다. 필요한 페이지를 빠르게 찾도록 설계했습니다.</p>
-        </a>
-      </div>
-      <div class="ad-slot" aria-label="광고 영역">AdSense 배너 영역 (메인)</div>
-    </section>
-  </main>
+          <aside class="panel stat-list" aria-label="사이트 구성 정보">
+            <div class="stat-item">
+              <strong>FAST</strong>
+              페이지 이동 없이 핵심 도구로 빠른 진입
+            </div>
+            <div class="stat-item">
+              <strong>READY</strong>
+              운영 문서와 기능 페이지를 즉시 연결
+            </div>
+            <div class="stat-item">
+              <strong>EXPAND</strong>
+              새 도구를 카드 단위로 지속 확장 가능
+            </div>
+          </aside>
+        </div>
+
+        <section class="popular-strip panel" aria-labelledby="today-popular-slots">
+          <div class="popular-strip__head">
+            <h2 id="today-popular-slots">👉 오늘의 인기 펫 슬롯</h2>
+            <a href="petboard.html">실시간 순위 보러가기</a>
+          </div>
+
+          <div id="popularSlots" class="popular-slots" role="list" aria-label="오늘의 인기 슬롯 미리보기">
+            <p class="popular-loading">인기 슬롯을 불러오는 중...</p>
+          </div>
+        </section>
+      </section>
+
+      <section class="section" aria-labelledby="featured-tools">
+        <h2 id="featured-tools">빠른 실행 도구</h2>
+        <div class="card-grid tool-grid">
+          <a class="card" href="tools.html">
+            <h3>유틸 리스트</h3>
+            <p>현재 제공 중인 각종 기능 페이지를 한 번에 모아보고 원하는 도구로 바로 이동할 수 있습니다.</p>
+          </a>
+          <a class="card" href="guide.html">
+            <h3>운영 가이드</h3>
+            <p>도구 사용 흐름, 운영 목적, 페이지 구성 원칙을 정리한 문서입니다.</p>
+          </a>
+          <a class="card" href="index.html">
+            <h3>메인 대시보드</h3>
+            <p>실행 빈도가 높은 기능부터 배치한 시작 화면입니다. 필요한 페이지를 빠르게 찾도록 설계했습니다.</p>
+          </a>
+        </div>
+        <div class="ad-slot" aria-label="광고 영역">AdSense 배너 영역 (메인)</div>
+      </section>
+    </main>
+
+    <aside class="side-ad side-ad--right" aria-label="오른쪽 광고 영역">
+      <div class="side-ad__box">AdSense 사이드 영역 (우)</div>
+    </aside>
+  </div>
 
   <footer class="layout site-footer">
     <div>© 2026 UtilBox. All rights reserved.</div>
@@ -88,6 +105,8 @@
       <a href="privacy.html">개인정보 처리방침</a>
     </div>
   </footer>
+
+  <script type="module" src="index.js"></script>
 </body>
 </html>
 
