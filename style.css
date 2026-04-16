@@ -253,7 +253,7 @@ button {
     radial-gradient(circle at bottom right, rgba(192, 132, 252, 0.08), transparent 24%),
     linear-gradient(180deg, #020617 0%, #0b1120 100%);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
@@ -701,8 +701,38 @@ button {
     padding: 4px;
   }
 
+  .slot-number,
+  .slot-badge {
+    font-size: 8px;
+    padding: 2px 4px;
+  }
+
+  .crown-icon {
+    font-size: 14px;
+    top: -4px;
+    right: -3px;
+  }
+
+  .crown-icon.rank-1 {
+    font-size: 20px;
+    top: -10px;
+    right: -7px;
+  }
+
+  .crown-icon.rank-2 {
+    font-size: 16px;
+    top: -7px;
+    right: -5px;
+  }
+
+  .crown-icon.rank-3 {
+    font-size: 14px;
+  }
+
   .site-footer {
     flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
     text-align: center;
   }
 

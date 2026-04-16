@@ -5,6 +5,8 @@ const TOTAL_SLOTS = 365;
 const HEADER_HEIGHT = 50;
 const GRID_PADDING = 12;
 const GRID_GAP = 4;
+const MOBILE_BREAKPOINT = 768;
+const MOBILE_TARGET_CELL = 44;
 const VIEW_REFRESH_MS = 10000;
 
 const slotGrid = document.getElementById('slotGrid');
@@ -220,11 +222,28 @@ function calculateBestGrid(total, width, height) {
 }
 
 function applyGridLayout() {
+  const viewportWidth = window.innerWidth;
+
+  if (viewportWidth <= MOBILE_BREAKPOINT) {
+    const mobileUsableWidth = Math.max(viewportWidth - GRID_PADDING, 280);
+    const columns = Math.max(
+      4,
+      Math.min(8, Math.floor((mobileUsableWidth + GRID_GAP) / (MOBILE_TARGET_CELL + GRID_GAP)))
+    );
+    const rows = Math.ceil(TOTAL_SLOTS / columns);
+    const cellSize = Math.floor(
+      (mobileUsableWidth - GRID_GAP * (columns - 1)) / columns
+    );
+
+    slotGrid.style.gridTemplateColumns = `repeat(${columns}, ${cellSize}px)`;
+    slotGrid.style.gridTemplateRows = `repeat(${rows}, ${cellSize}px)`;
+    return;
+  }
+
   const topBarHeight = topBar?.offsetHeight || HEADER_HEIGHT;
   const adBannerHeight = adBanner?.offsetHeight || 0;
   const reservedHeight = topBarHeight + adBannerHeight + 12;
 
-  const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight - reservedHeight;
 
   const usableWidth = viewportWidth - GRID_PADDING;
