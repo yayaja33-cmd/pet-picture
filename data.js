@@ -26,6 +26,7 @@ export const registeredPets = {
     image: 'https://i.postimg.cc/G2xd4Xks/kongji(175).jpg',
     views: 0,
     registeredAt: Date.now()
+  },
   177: {
     name: '콩지',
     desc: '시저 앞치마 두른 모델 겸댕이',
